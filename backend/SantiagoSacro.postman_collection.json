@@ -1,0 +1,739 @@
+{
+  "info": {
+    "name": "Santiago Sacro - API (DSY1105)",
+    "description": "Coleccion de pruebas del backend. Variable host por defecto http://localhost:8080",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Autenticacion",
+      "item": [
+        {
+          "name": "Registro de visitante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/registro",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Humberto Prueba\",\n  \"correo\": \"humberto.prueba@correo.cl\",\n  \"clave\": \"Clave123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login encargado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"encargado.sanfrancisco@iglesiadesantiago.cl\",\n  \"clave\": \"Encargado123\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const datos = pm.response.json();",
+                  "pm.collectionVariables.set('token', datos.token);",
+                  "pm.test('Devuelve token', function () {",
+                  "    pm.expect(datos.token).to.be.a('string');",
+                  "});",
+                  "pm.test('El rol es ENCARGADO', function () {",
+                  "    pm.expect(datos.rol).to.eql('ENCARGADO');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login visitante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"visitante@correo.cl\",\n  \"clave\": \"Visita123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/perfil",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "perfil"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login con clave incorrecta (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"visitante@correo.cl\",\n  \"clave\": \"incorrecta\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Recintos (publico)",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por texto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos?q=merced",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "merced"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar por estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos?estado=ABIERTO",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "ABIERTO"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cercanos por GPS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos/cercanos?latitud=-33.4378&longitud=-70.6506&radioKm=3",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "cercanos"
+              ],
+              "query": [
+                {
+                  "key": "latitud",
+                  "value": "-33.4378"
+                },
+                {
+                  "key": "longitud",
+                  "value": "-70.6506"
+                },
+                {
+                  "key": "radioKm",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ficha patrimonial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos/2",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recinto inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/recintos/999",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Eventos y avisos (publico)",
+      "item": [
+        {
+          "name": "Cartelera",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/eventos",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "eventos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cartelera por categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/eventos?idCategoria=1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "eventos"
+              ],
+              "query": [
+                {
+                  "key": "idCategoria",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Avisos vigentes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/avisos/vigentes",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "avisos",
+                "vigentes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Categorias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/catalogos/categorias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "catalogos",
+                "categorias"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Encargado (requiere token)",
+      "item": [
+        {
+          "name": "Mis recintos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/encargado/mis-recintos",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "encargado",
+                "mis-recintos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado del recinto",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/2/estado",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2",
+                "estado"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"EN_CELEBRACION\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Publicar evento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/2/eventos",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2",
+                "eventos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Concierto de organo\",\n  \"descripcion\": \"Evento de prueba\",\n  \"idCategoria\": 1,\n  \"fechaInicio\": \"2026-11-15\",\n  \"horaInicio\": \"20:00:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Registrar bloque excepcional",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/2/bloques",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2",
+                "bloques"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-11-16\",\n  \"horaInicio\": \"20:00:00\",\n  \"horaTermino\": \"22:00:00\",\n  \"motivo\": \"Apertura especial nocturna\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Levantar aviso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/2/avisos",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2",
+                "avisos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texto\": \"Hoy cerramos a las 17:00\",\n  \"vigenciaHasta\": \"2026-11-20T23:59:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Bandeja de solicitudes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/encargado/solicitudes",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "encargado",
+                "solicitudes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Guias del recinto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/encargado/recintos/2/guias",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "encargado",
+                "recintos",
+                "2",
+                "guias"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Aceptar solicitud con guia",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/solicitudes/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "solicitudes",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aceptar\": true,\n  \"idGuia\": 1\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Errores esperados",
+      "item": [
+        {
+          "name": "Sin token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/api/encargado/solicitudes",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "encargado",
+                "solicitudes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recinto que no administra (403)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/4/estado",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "4",
+                "estado"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"ABIERTO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Validacion de campos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/auth/registro",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"correo\": \"no-es-correo\",\n  \"clave\": \"123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Bloque con horas invertidas (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/api/recintos/2/bloques",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "api",
+                "recintos",
+                "2",
+                "bloques"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-11-20\",\n  \"horaInicio\": \"22:00:00\",\n  \"horaTermino\": \"20:00:00\",\n  \"motivo\": \"Horas invertidas\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

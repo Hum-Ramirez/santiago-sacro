@@ -1,0 +1,135 @@
+### Santiago Sacro - coleccion de pruebas
+### En IntelliJ: abrir este archivo y pulsar el triangulo verde de cada bloque.
+
+@host = http://localhost:8080
+
+### 1. Registro de un visitante nuevo
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Humberto Prueba",
+  "correo": "humberto.prueba@correo.cl",
+  "clave": "Clave123"
+}
+
+### 2. Login del encargado (guarda el token)
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "correo": "encargado.sanfrancisco@iglesiadesantiago.cl",
+  "clave": "Encargado123"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+### 3. Perfil del usuario conectado
+GET {{host}}/api/auth/perfil
+Authorization: Bearer {{token}}
+
+### 4. Listado publico de recintos
+GET {{host}}/api/recintos
+
+### 5. Busqueda por texto
+GET {{host}}/api/recintos?q=merced
+
+### 6. Recintos cercanos (GPS de la Plaza de Armas)
+GET {{host}}/api/recintos/cercanos?latitud=-33.4378&longitud=-70.6506&radioKm=3
+
+### 7. Ficha patrimonial
+GET {{host}}/api/recintos/2
+
+### 8. Cartelera de eventos
+GET {{host}}/api/eventos
+
+### 9. Avisos vigentes
+GET {{host}}/api/avisos/vigentes
+
+### 10. Catalogo de categorias
+GET {{host}}/api/catalogos/categorias
+
+### 11. El encargado cambia el estado de su recinto
+PATCH {{host}}/api/recintos/2/estado
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "estado": "EN_CELEBRACION"
+}
+
+### 12. El encargado publica un evento
+POST {{host}}/api/recintos/2/eventos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "titulo": "Concierto de organo",
+  "descripcion": "Evento de prueba creado desde la coleccion",
+  "idCategoria": 1,
+  "fechaInicio": "2026-11-15",
+  "horaInicio": "20:00:00"
+}
+
+### 13. El encargado registra un bloque horario excepcional
+POST {{host}}/api/recintos/2/bloques
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "fecha": "2026-11-16",
+  "horaInicio": "20:00:00",
+  "horaTermino": "22:00:00",
+  "motivo": "Apertura especial nocturna"
+}
+
+### 14. El encargado levanta un aviso
+POST {{host}}/api/recintos/2/avisos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "texto": "Hoy cerramos a las 17:00 por mantencion",
+  "vigenciaHasta": "2026-11-20T23:59:00"
+}
+
+### 15. Bandeja de solicitudes del encargado
+GET {{host}}/api/encargado/solicitudes
+Authorization: Bearer {{token}}
+
+### 16. Guias disponibles del recinto
+GET {{host}}/api/encargado/recintos/2/guias
+Authorization: Bearer {{token}}
+
+### 17. Aceptar una solicitud asignando guia
+PATCH {{host}}/api/solicitudes/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "aceptar": true,
+  "idGuia": 1
+}
+
+### 18. Error esperado 403: el encargado no administra ese recinto
+PATCH {{host}}/api/recintos/4/estado
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "estado": "ABIERTO"
+}
+
+### 19. Error esperado 401: sin token
+GET {{host}}/api/encargado/solicitudes
+
+### 20. Error esperado 400: validacion de campos
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "correo": "no-es-un-correo",
+  "clave": "123"
+}
