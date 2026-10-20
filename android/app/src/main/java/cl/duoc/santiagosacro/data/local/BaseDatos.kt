@@ -7,8 +7,15 @@ import androidx.room.RoomDatabase
 
 /** Base de datos local del dispositivo (Room sobre SQLite). */
 @Database(
-    entities = [RecintoLocal::class, Favorito::class, ParadaRuta::class],
-    version = 1,
+    entities = [
+        RecintoLocal::class,
+        Favorito::class,
+        ParadaRuta::class,
+        UsuarioLocal::class,
+        EventoLocal::class,
+        HorarioLocal::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class BaseDatos : RoomDatabase() {
@@ -16,6 +23,9 @@ abstract class BaseDatos : RoomDatabase() {
     abstract fun recintoDao(): RecintoDao
     abstract fun favoritoDao(): FavoritoDao
     abstract fun rutaDao(): RutaDao
+    abstract fun usuarioDao(): UsuarioDao
+    abstract fun eventoDao(): EventoDao
+    abstract fun horarioDao(): HorarioDao
 
     companion object {
 
