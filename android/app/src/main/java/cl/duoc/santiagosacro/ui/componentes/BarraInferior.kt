@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -28,6 +29,7 @@ private val destinos = listOf(
     Destino(Rutas.CARTELERA, "Cartelera", Icons.Default.CalendarMonth),
     Destino(Rutas.RUTA, "Mi ruta", Icons.Default.Route),
     Destino(Rutas.FAVORITOS, "Favoritos", Icons.Default.FavoriteBorder),
+    Destino(Rutas.QR, "QR", Icons.Default.QrCodeScanner),
     Destino(Rutas.ACCESO, "Acceso", Icons.Default.Person)
 )
 

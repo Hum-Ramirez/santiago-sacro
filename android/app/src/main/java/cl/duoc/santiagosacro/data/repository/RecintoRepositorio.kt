@@ -8,6 +8,8 @@ import cl.duoc.santiagosacro.data.local.RecintoDao
 import cl.duoc.santiagosacro.data.local.Sembrador
 import cl.duoc.santiagosacro.data.remote.dto.RecintoDetalle
 import cl.duoc.santiagosacro.data.remote.dto.RecintoResumen
+import kotlin.Int
+import kotlin.String
 
 /**
  * Unica fuente de datos de recintos para la interfaz.
@@ -88,6 +90,9 @@ class RecintoRepositorio(
                 latitud = fila.latitud,
                 longitud = fila.longitud,
                 descripcionHistorica = fila.descripcion,
+                santoPatrono=fila.santoPatrono,
+                anioConstruccion=fila.anioConstruccion,
+                fiestaPrincipal=fila.fiestaPrincipal,
                 estadoApertura = fila.estadoApertura,
                 horarios = horarioDao.porRecinto(id).map { it.aRespuesta() },
                 bloquesExcepcionales = emptyList(),

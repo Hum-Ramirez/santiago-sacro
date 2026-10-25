@@ -30,7 +30,7 @@ fun AppSantiagoSacro() {
     val rutaActual = entradaActual?.destination?.route
 
     val mostrarBarra = rutaActual in listOf(
-        Rutas.MAPA, Rutas.CARTELERA, Rutas.RUTA, Rutas.FAVORITOS, Rutas.ACCESO
+        Rutas.MAPA, Rutas.CARTELERA, Rutas.RUTA, Rutas.FAVORITOS, Rutas.QR, Rutas.ACCESO
     )
 
     Scaffold(
@@ -95,6 +95,14 @@ fun AppSantiagoSacro() {
             composable(Rutas.FAVORITOS) {
                 val vm: FavoritosViewModel = viewModel(factory = FavoritosViewModel.Factory)
                 PantallaFavoritos(
+                    viewModel = vm,
+                    onAbrirRecinto = { id -> navegacion.navigate(Rutas.ficha(id)) }
+                )
+            }
+
+            composable(Rutas.QR) {
+                val vm: QrViewModel = viewModel(factory = QrViewModel.Factory)
+                PantallaQr(
                     viewModel = vm,
                     onAbrirRecinto = { id -> navegacion.navigate(Rutas.ficha(id)) }
                 )

@@ -55,6 +55,9 @@ class Sembrador(
                 longitud = -70.6506,
                 estadoApertura = "ABIERTO",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "Santiago Apostol",
+                anioConstruccion =   1800,
+                fiestaPrincipal= "25 de Julio",
                 fechaSync = ahora
             ),
             RecintoLocal(
@@ -67,6 +70,9 @@ class Sembrador(
                 longitud = -70.6490,
                 estadoApertura = "ABIERTO",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "San Francisco de Asis",
+                anioConstruccion =   1628,
+                fiestaPrincipal= "25 de Octubre",
                 fechaSync = ahora
             ),
             RecintoLocal(
@@ -79,6 +85,9 @@ class Sembrador(
                 longitud = -70.6475,
                 estadoApertura = "EN_CELEBRACION",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "Virgen de la Merced",
+                anioConstruccion =   1760,
+                fiestaPrincipal= "24 de septiembre",
                 fechaSync = ahora
             ),
             RecintoLocal(
@@ -91,6 +100,9 @@ class Sembrador(
                 longitud = -70.6520,
                 estadoApertura = "CERRADO",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "Santo Domingo de Guzman",
+                anioConstruccion =   1808,
+                fiestaPrincipal= "8 de agosto",
                 fechaSync = ahora
             ),
             RecintoLocal(
@@ -103,6 +115,9 @@ class Sembrador(
                 longitud = -70.6465,
                 estadoApertura = "ABIERTO",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "San Agustin de Hipona",
+                anioConstruccion =   1625,
+                fiestaPrincipal= "28 de agosto",
                 fechaSync = ahora
             ),
             RecintoLocal(
@@ -115,6 +130,9 @@ class Sembrador(
                 longitud = -70.6494,
                 estadoApertura = "CERRADO",
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
+                santoPatrono = "Santisimo Sacramento",
+                anioConstruccion =   1931,
+                fiestaPrincipal= "Corpus Christi",
                 fechaSync = ahora
             )
         )

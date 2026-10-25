@@ -111,27 +111,63 @@ fun PantallaFicha(
                                 detalle.horarios.forEach { horario ->
                                     Text(
                                         horario.nombreDia + ": " +
-                                            horario.horaApertura + " a " + horario.horaCierre,
+                                                horario.horaApertura + " a " + horario.horaCierre,
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Piedra
                                     )
+
+
                                 }
                             }
 
                             if (detalle.bloquesExcepcionales.isNotEmpty()) {
                                 Spacer(Modifier.height(10.dp))
-                                Text("Aperturas especiales", style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    "Aperturas especiales",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
                                 Spacer(Modifier.height(4.dp))
                                 detalle.bloquesExcepcionales.forEach { bloque ->
                                     Text(
                                         bloque.fecha + ": " + bloque.horaInicio +
-                                            " a " + bloque.horaTermino +
-                                            (if (bloque.motivo.isNotBlank()) " (" + bloque.motivo + ")" else ""),
+                                                " a " + bloque.horaTermino +
+                                                (if (bloque.motivo.isNotBlank()) " (" + bloque.motivo + ")" else ""),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = TerracotaOscuro
                                     )
                                 }
                             }
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = PapelClaro),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(14.dp)) {
+                            Text("Patrimonio", style = MaterialTheme.typography.titleMedium)
+                            Spacer(Modifier.height(6.dp))
+
+                            Text(
+                                "Santo patrono: " + detalle.santoPatrono,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Piedra
+                            )
+                            Spacer(Modifier.height(4.dp))
+
+                            Text(
+                                "Construccion: " + detalle.anioConstruccion,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Piedra
+                            )
+                            Spacer(Modifier.height(4.dp))
+
+                            Text(
+                                "Fiesta principal: " + detalle.fiestaPrincipal,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Piedra
+                            )
                         }
                     }
 

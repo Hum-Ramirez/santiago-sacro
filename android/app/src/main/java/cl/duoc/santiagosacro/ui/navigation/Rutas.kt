@@ -7,6 +7,7 @@ object Rutas {
     const val CARTELERA = "cartelera"
     const val RUTA = "ruta"
     const val FAVORITOS = "favoritos"
+    const val QR = "qr"
     const val ACCESO = "acceso"
     const val REGISTRO = "registro"
     const val PANEL = "panel"

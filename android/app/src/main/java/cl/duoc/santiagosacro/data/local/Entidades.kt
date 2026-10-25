@@ -19,6 +19,9 @@ data class RecintoLocal(
     val longitud: Double,
     val estadoApertura: String,
     val descripcion: String,
+    val santoPatrono: String,
+    val anioConstruccion: Int,
+    val fiestaPrincipal: String,
     val fechaSync: Long
 )
 
