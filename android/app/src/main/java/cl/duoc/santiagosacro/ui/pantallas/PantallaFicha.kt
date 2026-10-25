@@ -24,7 +24,8 @@ fun PantallaFicha(
     idRecinto: Long,
     viewModel: FichaViewModel,
     onVolver: () -> Unit,
-    onIrARuta: () -> Unit
+    onIrARuta: () -> Unit,
+    onSolicitarGuia: () -> Unit
 ) {
     LaunchedEffect(idRecinto) { viewModel.cargar(idRecinto) }
 
@@ -115,8 +116,6 @@ fun PantallaFicha(
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = Piedra
                                     )
-
-
                                 }
                             }
 
@@ -139,6 +138,7 @@ fun PantallaFicha(
                             }
                         }
                     }
+
                     Spacer(Modifier.height(16.dp))
 
                     Card(
@@ -224,6 +224,16 @@ fun PantallaFicha(
                         ) {
                             Text("Ver mi ruta")
                         }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+
+                    OutlinedButton(
+                        onClick = onSolicitarGuia,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Solicitar guia voluntario")
                     }
 
                     Spacer(Modifier.height(24.dp))

@@ -72,7 +72,22 @@ fun AppSantiagoSacro() {
                     idRecinto = id,
                     viewModel = vm,
                     onVolver = { navegacion.popBackStack() },
-                    onIrARuta = { navegacion.navigate(Rutas.RUTA) }
+                    onIrARuta = { navegacion.navigate(Rutas.RUTA) },
+                    onSolicitarGuia = { navegacion.navigate(Rutas.solicitud(id)) }
+                )
+            }
+
+            composable(
+                route = Rutas.SOLICITUD,
+                arguments = listOf(navArgument("idRecinto") { type = NavType.LongType })
+            ) { entrada ->
+                val id = entrada.arguments?.getLong("idRecinto") ?: 0L
+                val vm: SolicitudViewModel = viewModel(factory = SolicitudViewModel.Factory)
+                PantallaSolicitud(
+                    idRecinto = id,
+                    viewModel = vm,
+                    onVolver = { navegacion.popBackStack() },
+                    onIrAAcceso = { navegacion.navigate(Rutas.ACCESO) }
                 )
             }
 

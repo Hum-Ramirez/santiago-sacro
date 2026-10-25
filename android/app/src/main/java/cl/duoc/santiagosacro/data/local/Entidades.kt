@@ -89,3 +89,22 @@ data class CategoriaLocal(
     val idCategoria: Long,
     val categoria: String
 )
+/**
+ * Solicitud de guia voluntario hecha por un visitante.
+ * El encargado del recinto la acepta o la rechaza desde su panel.
+ */
+@Entity(tableName = "solicitud_local")
+data class SolicitudLocal(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val idRecinto: Long,
+    val nombreRecinto: String,
+    val correoSolicitante: String,
+    val fechaVisita: String,
+    val horaVisita: String,
+    val tamanoGrupo: Int,
+    val contacto: String,
+    val estado: String,
+    val guiaAsignado: String? = null,
+    val motivoRechazo: String? = null,
+    val fechaSolicitud: Long
+)

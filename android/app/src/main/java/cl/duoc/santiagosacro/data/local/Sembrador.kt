@@ -72,7 +72,7 @@ class Sembrador(
                 descripcion = "Ficha de demostracion con datos sinteticos para el MVP academico.",
                 santoPatrono = "San Francisco de Asis",
                 anioConstruccion =   1628,
-                fiestaPrincipal= "25 de Octubre",
+                fiestaPrincipal= "4 de Octubre",
                 fechaSync = ahora
             ),
             RecintoLocal(

@@ -42,6 +42,8 @@ object Contenedor {
         private set
     lateinit var rutaRepositorio: RutaRepositorio
         private set
+    lateinit var solicitudRepositorio: SolicitudRepositorio
+        private set
     lateinit var servicioUbicacion: ServicioUbicacion
         private set
 
@@ -79,6 +81,7 @@ object Contenedor {
             recintoDao = baseDatos.recintoDao(),
             usuarioDao = baseDatos.usuarioDao(),
             eventoDao = baseDatos.eventoDao(),
+            solicitudDao = baseDatos.solicitudDao(),
             sesion = sesion,
             sembrador = sembrador
         )
@@ -86,6 +89,11 @@ object Contenedor {
         rutaRepositorio = RutaRepositorio(
             baseDatos.rutaDao(),
             baseDatos.favoritoDao()
+        )
+
+        solicitudRepositorio = SolicitudRepositorio(
+            solicitudDao = baseDatos.solicitudDao(),
+            sesion = sesion
         )
 
         servicioUbicacion = ServicioUbicacion(app)

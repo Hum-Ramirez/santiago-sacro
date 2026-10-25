@@ -124,6 +124,32 @@ interface EventoDao {
 }
 
 @Dao
+interface SolicitudDao {
+
+    @Insert
+    suspend fun insertar(solicitud: SolicitudLocal)
+
+    /** Las solicitudes de un visitante, para que siga su estado. */
+    @Query("SELECT * FROM solicitud_local WHERE correoSolicitante = :correo ORDER BY id DESC")
+    suspend fun porSolicitante(correo: String): List<SolicitudLocal>
+
+    /** Las solicitudes que le llegan al encargado de un recinto. */
+    @Query("SELECT * FROM solicitud_local WHERE idRecinto = :idRecinto ORDER BY id DESC")
+    suspend fun porRecinto(idRecinto: Long): List<SolicitudLocal>
+
+    @Query("SELECT * FROM solicitud_local WHERE id = :id")
+    suspend fun porId(id: Long): SolicitudLocal?
+
+    /**
+     * Aceptar o rechazar cambia varios campos de la misma fila (el estado, el
+     * guia asignado, el motivo), asi que aca si conviene @Update con la
+     * entidad completa en vez de un UPDATE por columna.
+     */
+    @Update
+    suspend fun actualizar(solicitud: SolicitudLocal)
+}
+
+@Dao
 interface HorarioDao {
 
     @Query("SELECT * FROM horario_local WHERE idRecinto = :idRecinto ORDER BY diaSemana ASC")

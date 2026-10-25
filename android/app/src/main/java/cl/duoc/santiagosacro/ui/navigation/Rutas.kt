@@ -11,6 +11,9 @@ object Rutas {
     const val ACCESO = "acceso"
     const val REGISTRO = "registro"
     const val PANEL = "panel"
+    const val SOLICITUD = "solicitud/{idRecinto}"
 
     fun ficha(idRecinto: Long) = "ficha/" + idRecinto
+
+    fun solicitud(idRecinto: Long) = "solicitud/" + idRecinto
 }

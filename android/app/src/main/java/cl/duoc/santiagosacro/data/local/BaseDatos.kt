@@ -13,9 +13,10 @@ import androidx.room.RoomDatabase
         ParadaRuta::class,
         UsuarioLocal::class,
         EventoLocal::class,
-        HorarioLocal::class
+        HorarioLocal::class,
+        SolicitudLocal::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class BaseDatos : RoomDatabase() {
@@ -26,6 +27,7 @@ abstract class BaseDatos : RoomDatabase() {
     abstract fun usuarioDao(): UsuarioDao
     abstract fun eventoDao(): EventoDao
     abstract fun horarioDao(): HorarioDao
+    abstract fun solicitudDao(): SolicitudDao
 
     companion object {
 

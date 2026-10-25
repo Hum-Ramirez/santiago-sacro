@@ -6,6 +6,7 @@ import cl.duoc.santiagosacro.data.local.EventoDao
 import cl.duoc.santiagosacro.data.local.EventoLocal
 import cl.duoc.santiagosacro.data.local.RecintoDao
 import cl.duoc.santiagosacro.data.local.Sembrador
+import cl.duoc.santiagosacro.data.local.SolicitudDao
 import cl.duoc.santiagosacro.data.local.UsuarioDao
 import cl.duoc.santiagosacro.data.remote.dto.EventoRespuesta
 import cl.duoc.santiagosacro.data.remote.dto.GuiaRespuesta
@@ -24,6 +25,7 @@ class EncargadoRepositorio(
     private val recintoDao: RecintoDao,
     private val usuarioDao: UsuarioDao,
     private val eventoDao: EventoDao,
+    private val solicitudDao: SolicitudDao,
     private val sesion: SesionLocal,
     private val sembrador: Sembrador
 ) {
@@ -123,30 +125,93 @@ class EncargadoRepositorio(
         return Resultado.Exito(nuevo.aRespuesta())
     }
 
+    /** Las solicitudes dirigidas al recinto que administra el encargado. */
+    suspend fun solicitudes(): Resultado<List<SolicitudRespuesta>> {
+        val idRecinto = recintoAdministrado()
+            ?: return Resultado.Error("Su cuenta no tiene recintos asignados")
+
+        return Resultado.Exito(
+            solicitudDao.porRecinto(idRecinto).map { it.aRespuesta() }
+        )
+    }
+
     /**
-     * Las solicitudes de guia y los guias voluntarios no tienen tabla local.
+     * Los guias voluntarios de cada recinto.
      *
-     * Es deliberado: la gestion de solicitudes es funcionalidad de la segunda
-     * entrega y en el backend ya esta implementada y probada con Postman. Aca
-     * se devuelve una lista vacia para que el panel se dibuje completo sin
-     * inventar datos que no existen.
+     * No tienen tabla propia: son los mismos cuatro guias sinteticos que
+     * siembra el backend, aqui como una lista fija. Administrarlos es la
+     * HU25, priorizada como Should y pendiente para la Unidad 3.
      */
-    suspend fun solicitudes(): Resultado<List<SolicitudRespuesta>> =
-        Resultado.Exito(emptyList<SolicitudRespuesta>())
-
     suspend fun guias(idRecinto: Long): Resultado<List<GuiaRespuesta>> =
-        Resultado.Exito(emptyList<GuiaRespuesta>())
+        Resultado.Exito(GUIAS_POR_RECINTO[idRecinto] ?: emptyList())
 
+    /**
+     * Acepta o rechaza una solicitud.
+     *
+     * Lee la fila, le cambia el estado y la vuelve a guardar con @Update.
+     * Se usa @Update y no un UPDATE por columna porque al aceptar o rechazar
+     * cambian varios campos a la vez, y la entidad completa los lleva todos.
+     */
     suspend fun gestionar(
         idSolicitud: Long,
         aceptar: Boolean,
         idGuia: Long? = null,
         motivo: String? = null
-    ): Resultado<SolicitudRespuesta> =
-        Resultado.Error("La gestion de solicitudes requiere conexion con el servidor")
+    ): Resultado<SolicitudRespuesta> {
+
+        val idRecinto = recintoAdministrado()
+            ?: return Resultado.Error("Su cuenta no tiene recintos asignados")
+
+        val solicitud = solicitudDao.porId(idSolicitud)
+            ?: return Resultado.Error("No se encontro la solicitud")
+
+        if (solicitud.idRecinto != idRecinto) {
+            return Resultado.Error("Esa solicitud no pertenece a su recinto")
+        }
+
+        if (solicitud.estado != SolicitudRepositorio.PENDIENTE) {
+            return Resultado.Error("La solicitud ya fue respondida")
+        }
+
+        val guia = GUIAS_POR_RECINTO[idRecinto]?.firstOrNull { it.id == idGuia }
+
+        val actualizada = if (aceptar) {
+            solicitud.copy(
+                estado = SolicitudRepositorio.ACEPTADA,
+                guiaAsignado = guia?.nombre ?: "Guia por confirmar",
+                motivoRechazo = null
+            )
+        } else {
+            solicitud.copy(
+                estado = SolicitudRepositorio.RECHAZADA,
+                guiaAsignado = null,
+                motivoRechazo = motivo ?: "Sin guias disponibles para esa fecha"
+            )
+        }
+
+        solicitudDao.actualizar(actualizada)
+        return Resultado.Exito(actualizada.aRespuesta())
+    }
 
     private suspend fun recintoAdministrado(): Long? {
         val correo = sesion.correo ?: return null
         return usuarioDao.porCorreo(correo)?.idRecintoAdministrado
+    }
+
+    private companion object {
+
+        /** Los mismos guias sinteticos que siembra el backend. */
+        val GUIAS_POR_RECINTO = mapOf(
+            1L to listOf(
+                GuiaRespuesta(3, "Guia voluntario 3", "Espanol", true)
+            ),
+            2L to listOf(
+                GuiaRespuesta(1, "Guia voluntario 1", "Espanol", true),
+                GuiaRespuesta(2, "Guia voluntario 2", "Ingles", true)
+            ),
+            3L to listOf(
+                GuiaRespuesta(4, "Guia voluntario 4", "Espanol", false)
+            )
+        )
     }
 }
